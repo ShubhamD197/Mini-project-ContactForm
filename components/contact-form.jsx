@@ -6,18 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-// import { createContact } from "@/actions";
+import { createContact } from "@/actions";
+
 const ContactForm = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState("")
 
-
     async function onSubmit(formData) {
         setIsSubmitting(true)
         setMessage("")
 
-        const result = await createContact(formData); //createContact is server action
+        const result = await createContact(formData);
         console.log(result)
         if (result.success) {
             setMessage("Message sent successfully!")
@@ -32,7 +32,6 @@ const ContactForm = () => {
         setIsSubmitting(false)
 
     }
-
     return (
         <Card className="w-full max-w-2xl mx-auto">
             <CardHeader>
