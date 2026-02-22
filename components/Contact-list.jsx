@@ -1,9 +1,10 @@
-import { getContacts, updateContact } from "@/actions";
+import { getContacts, updateContact, deleteContact } from "@/actions";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, RefreshCw } from "lucide-react";
+import { Mail, RefreshCw, Trash } from "lucide-react";
+
 
 const ContactLists = async () => {
     const contacts = await getContacts();
@@ -54,30 +55,45 @@ const ContactLists = async () => {
                                     </p>
 
                                     <div className="flex gap-2">
-                                        {contact.status === "new" && (
-                                            <form
-                                                action={async () => {
-                                                    "use server";
-                                                    await updateContact(contact._id, "read");
-                                                }}
-                                            >
-                                                <Button variant="outline" size="sm" type="submit">
+                                        <form>
+                                            {contact.status === "new" && (
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    type="submit"
+                                                    formAction={async () => {
+                                                        "use server";
+                                                        await updateContact(contact._id, "read");
+                                                    }}
+                                                >
                                                     Mark as Read
                                                 </Button>
-                                            </form>
-                                        )}
-                                        {contact.status === "read" && (
-                                            <form
-                                                action={async () => {
-                                                    "use server";
-                                                    await updateContact(contact._id, "replied");
-                                                }}
-                                            >
-                                                <Button variant="outline" size="sm" type="submit">
+                                            )}
+                                            {contact.status === "read" && (
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    type="submit"
+                                                    formAction={async () => {
+                                                        "use server";
+                                                        await updateContact(contact._id, "replied");
+                                                    }}
+                                                >
                                                     Mark as Replied
                                                 </Button>
-                                            </form>
-                                        )}
+                                            )}
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                type="submit"
+                                                formAction={async () => {
+                                                    "use server";
+                                                    await deleteContact(contact._id);
+                                                }}
+                                            >
+                                                <Trash className="h-4 w-4" />
+                                            </Button>
+                                        </form>
                                     </div>
                                 </div>
                             </CardContent>
