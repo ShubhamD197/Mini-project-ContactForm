@@ -85,9 +85,26 @@ const getCachedStats = unstable_cache(
         return { total, newCount, readCount, repliedCount }
     },
     ["contact-stats"],
-    { tags: ["contact-stats"] }
+    {
+        tags: ["contact-stats"]
+    }
 )
 
 export async function getContactStats() {
     return getCachedStats()
+}
+
+export async function deleteContact(contactId) {
+    try {
+        await dbConnect()
+        await Contact.findByIdAndDelete(contactId)
+
+        revalidateTag("contact-stats");
+        revalidatePath("/contacts"); //need to rerender the page because its not just updating the card but autually deleting the contact
+
+        return { success: true }
+    } catch (error) {
+        console.error("Error deleting contact:", error)
+        return { success: false, error: "Failed to delete contact" }
+    }
 }
